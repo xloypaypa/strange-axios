@@ -1,25 +1,22 @@
 <template>
     <div id="app">
         <img alt="Vue logo" src="./assets/logo.png">
-        <h1>{{message}}</h1>
+        <h1>{{$store.getters.getMessage()}}</h1>
+        <h1>{{$store.getters.getMsg2()}}</h1>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
+    import store from './store/store'
 
     export default {
         name: 'app',
-        data: function () {
-            return {
-                message: "",
-            };
-        },
         created: function () {
-            const self = this;
+            store.commit("updateMessage", "loading");
             axios.get("http://127.0.0.1:8080/hello")
                 .then(function (responds) {
-                    self.message = responds.data;
+                    store.dispatch("updateAllMessage", responds.data);
                 })
                 .catch(error => window.console.log(error));
             window.console.log("finished");
